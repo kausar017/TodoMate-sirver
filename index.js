@@ -25,16 +25,30 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const userCollection = client.db('taskDB').collection('users')
+    const taskCollection = client.db('taskDB').collection('tasks')
 
-    app.post('/users',async(req,res)=>{
+    // user related apis
+    app.post('/users', async (req, res) => {
       const user = req.body;
       console.log(user);
-      const isExist =await userCollection.findOne({email:user?.email})
-      if(isExist){
+      const isExist = await userCollection.findOne({ email: user?.email })
+      if (isExist) {
         return res.status(409).send({ message: "User already exists." });
       }
       const result = await userCollection.insertOne(user);
       res.send(result)
+    })
+
+    // task related apis
+app.get('/tasks',async(req,res)=>{
+  const result  = await taskCollection.find().toArray();
+  res.send(result);
+})
+
+    app.post('/tasks', async (req, res) => {
+      const task = req.body;
+      const result = await taskCollection.insertOne(task);
+      res.send(result);
     })
 
 
