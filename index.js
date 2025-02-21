@@ -55,13 +55,13 @@ async function run() {
       res.send(result);
     });
 
-    app.put("updatTask/:id", async (req, res) => {
+    app.put("/updatTask/:id", async (req, res) => {
       const id = req.params.id;
-      const queary = { id: id };
+      const query = { _id: new ObjectId(id) };
       const updat = {
         $set: req.body,
       };
-      const result = await taskCollection.updateOne(queary, updat);
+      const result = await taskCollection.updateOne(query, updat);
       res.send(result);
     });
 
